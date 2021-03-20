@@ -19,6 +19,7 @@ public class GameStatus : MonoBehaviour
 
         if (gameStatusCount > 1)
         {
+            gameObject.SetActive(false);  // Prevents some bugs with interference between awake and destroy
             Destroy(gameObject);
         }
         else
