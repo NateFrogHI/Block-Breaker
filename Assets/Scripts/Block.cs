@@ -5,15 +5,16 @@ using UnityEngine;
 public class Block : MonoBehaviour
 {
     [SerializeField] AudioClip breakSound;
+    [SerializeField] GameObject blockSparklesVFX;
 
     // Cashed reference
     Level level;
-    GameStatus gameStatus;
+    GameSession gameStatus;
 
     private void Start()
     {
         level = FindObjectOfType<Level>();
-        gameStatus = FindObjectOfType<GameStatus>();
+        gameStatus = FindObjectOfType<GameSession>();
         level.CountBreakableBlocks();
     }
 
@@ -24,9 +25,21 @@ public class Block : MonoBehaviour
 
     private void DestroyBlock()
     {
-        gameStatus.AddToScore();
-        AudioSource.PlayClipAtPoint(breakSound, Camera.main.transform.position);
+        PlayBlockDestroySFX();
+        TriggerSparklesVFX();
         level.BlockDestroyed();
         Destroy(gameObject);
+    }
+
+    private void PlayBlockDestroySFX()
+    {
+        gameStatus.AddToScore();
+        AudioSource.PlayClipAtPoint(breakSound, Camera.main.transform.position);
+    }
+
+    private void TriggerSparklesVFX()
+    {
+        GameObject sparkles = Instantiate(blockSparklesVFX, transform.position, transform.rotation);
+        Destroy(sparkles, 1f);
     }
 }
